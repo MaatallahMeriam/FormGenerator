@@ -1,0 +1,76 @@
+scalar Long
+
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+type Query {
+    # Get status workflow BPMN diagram by the given type
+    getStatusChangeDiagram(type: String!): String
+    
+    # Get status workflow BPMN diagram by the given type ID
+    getStatusChangeDiagramByTypeId(typeId: Long!): String
+    
+    # Get PtsType by Name
+    getPtsTypeByName(name: String!): PtsType
+    
+    # Get PtsType by ID
+    getPtsTypeById(id: Long!): PtsType
+    
+    # Get all PtsTypes
+    getAllPtsTypes: [PtsType]
+    
+}
+
+
+
+type Mutation {
+    # Creates or updates status and status change via the given BPMN diagram
+    createOrUpdateStatus(xmlString: String!, typeId: Long!): String
+    
+    # Creates a new PtsType
+    createPtsType(input: PtsTypeInput!): PtsType
+    
+    # updates an existing PtsType
+    updatePtsType(id: Long!, input: PtsTypeInput!): PtsType
+
+    # deletes a PtsType by ID
+    deletePtsType(id: Long!): Boolean
+    
+    }
+
+    
+
+type PtsType {
+	id : Long
+	type : String
+    name: String
+    description: String
+    parentTypeId: Long
+    ticketId: Long
+    module: Long
+    tableName: String
+    staticTable: String
+    adminImages: Int
+    billable: Boolean
+    standalone: Boolean
+}
+
+type PtsTypes {
+    items: [PtsType]
+}
+
+input PtsTypeInput {
+    name: String
+    type : String
+    description: String
+    parentTypeId: Long
+    ticketId: Long
+    module: Long
+    tableName: String
+    staticTable: String
+    adminImages: Int
+    billable: Boolean
+    standalone: Boolean
+}

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+	
+	<changeSet id="us10829250 : adjust ptsType table" author="meriam">
+		<addColumn tableName="pts_type">
+			<column name="module" type="BIGINT(20)"/>
+			<column name="table_name" type="VARCHAR(100)"/>
+			<column name="static_table" type="VARCHAR(100)"/>
+			<column name="admin_images" type="INT(11)"/>
+			<column name="billable" type="BIT(1)"/>
+			<column name="standalone" type="BIT(1)"/>
+		</addColumn>
+	</changeSet>
+	
+</databaseChangeLog>

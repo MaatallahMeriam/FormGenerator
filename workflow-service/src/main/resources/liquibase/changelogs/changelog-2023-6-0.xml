@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+	<changeSet id="Requirement 10692410: Create PTS_TYPE table" author="mhedfi">
+		<createTable tableName="pts_type">
+	  		<column name="id" type="BIGINT(20)" autoIncrement="true" incrementBy="1">
+				<constraints primaryKey="true" nullable="false"/>
+			</column>
+            <column name="name" type="VARCHAR(100)">
+				<constraints nullable="false" />
+			</column>
+    		<column name="type" type="VARCHAR(100)"/>
+    		<column name="description" type="VARCHAR(250)"/>
+    		<column name="parent_type_id" type="BIGINT(20)">
+				<constraints foreignKeyName="fk_parent_type_id" references="pts_type(id)" deleteCascade="true" />
+			</column>
+			<!--STANDARD TECHNICAL COLUMNS -->
+			<column name="creator" type="VARCHAR(250)"/>
+			<column name="created" type="DATETIME">
+				<constraints nullable="false" />
+			</column>
+			<column name="modifier" type="VARCHAR(250)"/>
+			<column name="modified" type="DATETIME">
+				<constraints nullable="false" />
+			</column>
+			<column name="version" type="INTEGER" defaultValue="0">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	  	<modifySql dbms="mysql">
+     		<append value="ENGINE=INNODB CHARSET=UTF8 COLLATE utf8_general_ci"/>
+	  	</modifySql>
+	</changeSet>
+	
+	<changeSet id="Requirement 10692410 : add pts type link to pts status" author="mhedfi">
+        <dropColumn  tableName="pts_status">
+            <column  name="type"/>
+             <column  name="sub_type"/>
+        </dropColumn>
+        
+	     <addColumn tableName="pts_status">
+			 <column name="ticket_id" type="BIGINT(20)"/>
+			 <column name="type_id" type="BIGINT(20)" />
+	     </addColumn>
+	     
+	     <addForeignKeyConstraint
+			baseColumnNames="type_id" baseTableName="pts_status"
+			constraintName="fk_pts_status_type_id" onDelete="CASCADE"
+			referencedColumnNames="id" referencedTableName="pts_type" />
+	</changeSet>
+	
+	<changeSet id="Requirement 10692410 : add pts type link to pts status change" author="mhedfi">
+        <dropColumn  tableName="pts_status_change">
+            <column  name="type"/>
+             <column  name="sub_type"/>
+        </dropColumn>
+        
+	     <addColumn tableName="pts_status_change">
+			 <column name="ticket_id" type="BIGINT(20)"/>
+			 <column name="type_id" type="BIGINT(20)" />
+	     </addColumn>
+	     
+	     <addForeignKeyConstraint
+			baseColumnNames="type_id" baseTableName="pts_status_change"
+			constraintName="fk_pts_status_change_type_id" onDelete="CASCADE"
+			referencedColumnNames="id" referencedTableName="pts_type" />
+	</changeSet>
+	
+	<changeSet id="Requirement 10692410 : add ticket_id to pts type" author="mhedfi">
+	     <addColumn tableName="pts_type">
+			 <column name="ticket_id" type="BIGINT(20)"/>
+	     </addColumn>
+	</changeSet>
+	
+	<changeSet id="Requirement 10692410: Create pts_ticket_import table" author="mhedfi" dbms="mysql" >
+        <sqlFile endDelimiter="\$\$" stripComments="true" path="../sql/pts_ticket_import.sql" relativeToChangelogFile="true"/>
+	</changeSet>
+	
+</databaseChangeLog>

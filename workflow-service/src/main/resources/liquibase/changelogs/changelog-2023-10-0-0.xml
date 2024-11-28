@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+	
+	 <changeSet id="Requirement 10646613: create new table PTS_STATUS" author="mhedfi">
+    	<createTable tableName="pts_status">
+	  		<column name="id" type="BIGINT(20)" autoIncrement="true" incrementBy="1">
+				<constraints primaryKey="true" nullable="false"/>
+	  		</column>
+	  		<column name="name" type="VARCHAR(100)"/>
+    		<column name="type" type="VARCHAR(100)"/>
+    		<column name="sub_type" type="VARCHAR(100)"/>
+    		<column name="description" type="VARCHAR(250)"/>
+    		
+       		<!--     STANDARD TECHNICAL COLUMNS -->
+			<column name="creator" type="VARCHAR(250)"/>
+			<column name="created" type="DATETIME"><constraints nullable="false" /></column>
+			<column name="modifier" type="VARCHAR(250)"/>
+			<column name="modified" type="DATETIME"><constraints nullable="false" /></column>
+			<column name="version" type="INTEGER" defaultValue="0"><constraints nullable="false" /></column>
+     	</createTable>
+	  	<modifySql dbms="mysql">
+     		<append value="ENGINE=INNODB CHARSET=UTF8 COLLATE utf8_general_ci"/>
+	  	</modifySql>
+    </changeSet>    
+	
+	 <changeSet id="Requirement 10646613: create new table PTS_STATUS_CHANGE" author="mhedfi">
+    	<createTable tableName="pts_status_change">
+	  		<column name="id" type="BIGINT(20)" autoIncrement="true" incrementBy="1">
+				<constraints primaryKey="true" nullable="false"/>
+	  		</column>
+    		<column name="type" type="VARCHAR(100)"/>
+    		<column name="sub_type" type="VARCHAR(100)"/>
+    		<column name="description" type="VARCHAR(250)"/>
+    		<column name="from_pts_status_id" type="BIGINT(20)">
+			    <constraints  nullable="false" foreignKeyName="fk_from_pts_status_id" references="pts_status(id)" deleteCascade="true" />
+			</column>
+			<column name="to_pts_status_id" type="BIGINT(20)">
+			    <constraints  nullable="false" foreignKeyName="fk_to_pts_status_id" references="pts_status(id)" deleteCascade="true" />
+			</column>
+       		<!--     STANDARD TECHNICAL COLUMNS -->
+			<column name="creator" type="VARCHAR(250)"/>
+			<column name="created" type="DATETIME"><constraints nullable="false" /></column>
+			<column name="modifier" type="VARCHAR(250)"/>
+			<column name="modified" type="DATETIME"><constraints nullable="false" /></column>
+			<column name="version" type="INTEGER" defaultValue="0"><constraints nullable="false" /></column>
+     	</createTable>
+	  	<modifySql dbms="mysql">
+     		<append value="ENGINE=INNODB CHARSET=UTF8 COLLATE utf8_general_ci"/>
+	  	</modifySql>
+    </changeSet>
+    
+    <changeSet id="Requirement 10650851: create new table STATUS_WAY_POINT" author="mhedfi">
+    	<createTable tableName="STATUS_WAY_POINT">
+	  		<column name="id" type="BIGINT(20)" autoIncrement="true" incrementBy="1">
+				<constraints primaryKey="true" nullable="false"/>
+	  		</column>
+	  		<column name="bpmn_element_id" type="VARCHAR(500)"/>
+    		<column name="position_x" type="INTEGER"/>
+    		<column name="position_y" type="INTEGER"/>
+    		<column name="type" type="VARCHAR(100)"/>
+    		<column name="sub_type" type="VARCHAR(100)"/>
+    		
+       		<!--     STANDARD TECHNICAL COLUMNS -->
+			<column name="creator" type="VARCHAR(250)"/>
+			<column name="created" type="DATETIME"><constraints nullable="false" /></column>
+			<column name="modifier" type="VARCHAR(250)"/>
+			<column name="modified" type="DATETIME"><constraints nullable="false" /></column>
+			<column name="version" type="INTEGER" defaultValue="0"><constraints nullable="false" /></column>
+     	</createTable>
+	  	<modifySql dbms="mysql">
+     		<append value="ENGINE=INNODB CHARSET=UTF8 COLLATE utf8_general_ci"/>
+	  	</modifySql>
+    </changeSet>
+    
+    <changeSet id="Requirement 10650851: create new table STATUS_BOUNDS" author="mhedfi">
+    	<createTable tableName="STATUS_BOUNDS">
+	  		<column name="id" type="BIGINT(20)" autoIncrement="true" incrementBy="1">
+				<constraints primaryKey="true" nullable="false"/>
+	  		</column>
+	  		<column name="BPMN_ELEMENT_ID" type="VARCHAR(500)"/>
+    		<column name="position_x" type="INTEGER"/>
+    		<column name="position_y" type="INTEGER"/>
+    		<column name="width" type="INTEGER"/>
+    		<column name="height" type="INTEGER"/>
+    		<column name="type" type="VARCHAR(100)"/>
+    		<column name="sub_type" type="VARCHAR(100)"/>
+    		
+       		<!--     STANDARD TECHNICAL COLUMNS -->
+			<column name="creator" type="VARCHAR(250)"/>
+			<column name="created" type="DATETIME"><constraints nullable="false" /></column>
+			<column name="modifier" type="VARCHAR(250)"/>
+			<column name="modified" type="DATETIME"><constraints nullable="false" /></column>
+			<column name="version" type="INTEGER" defaultValue="0"><constraints nullable="false" /></column>
+     	</createTable>
+	  	<modifySql dbms="mysql">
+     		<append value="ENGINE=INNODB CHARSET=UTF8 COLLATE utf8_general_ci"/>
+	  	</modifySql>
+    </changeSet>
+    
+    <changeSet id="Requirement 10654259: modify table STATUS_BOUNDS" author="mhedfi">
+	    <dropColumn tableName="STATUS_BOUNDS" columnName="type"/>
+	    <dropColumn tableName="STATUS_BOUNDS" columnName="sub_type"/>
+	    <addColumn tableName="STATUS_BOUNDS">
+	        <column name="pts_status_id" type="BIGINT(20)">
+	        	<constraints foreignKeyName="FK_STATUS_BOUNDS_PTS_STATUS_ID" references="pts_status(id)" />
+	        </column>
+	    </addColumn>
+	</changeSet>
+	
+	<changeSet id="Requirement 10654259: modify table STATUS_WAY_POINT" author="mhedfi">
+	    <dropColumn tableName="STATUS_WAY_POINT" columnName="type"/>
+	    <dropColumn tableName="STATUS_WAY_POINT" columnName="sub_type"/>
+	     <addColumn tableName="STATUS_WAY_POINT">
+	        <column name="pts_status_change_id" type="BIGINT(20)">
+	        	<constraints foreignKeyName="FK_STATUS_WAY_POINT_PTS_STATUS_ID" references="pts_status_change(id)" />
+	        </column>
+	    </addColumn>
+	</changeSet>
+	
+	<changeSet id="Requirement 10659136: add column is_start_status to PTS_STATUS" author="mhedfi">
+	     <addColumn tableName="PTS_STATUS">
+	        <column name="is_start_status" type="BOOLEAN">
+	        </column>
+	    </addColumn>
+	</changeSet>
+	
+	<changeSet id="Requirement 10659136: adjust FK constraints" author="mhedfi">
+		 <dropForeignKeyConstraint
+			baseTableName="STATUS_BOUNDS"
+			constraintName="FK_STATUS_BOUNDS_PTS_STATUS_ID" />
+	
+		<addForeignKeyConstraint
+			baseColumnNames="pts_status_id" baseTableName="STATUS_BOUNDS"
+			constraintName="FK_STATUS_BOUNDS_PTS_STATUS_ID" onDelete="CASCADE"
+			referencedColumnNames="id" referencedTableName="pts_status" />
+			
+	     <dropForeignKeyConstraint
+			baseTableName="STATUS_WAY_POINT"
+			constraintName="FK_STATUS_WAY_POINT_PTS_STATUS_ID" />
+	
+		<addForeignKeyConstraint
+			baseColumnNames="pts_status_change_id" baseTableName="STATUS_WAY_POINT"
+			constraintName="FK_STATUS_WAY_POINT_PTS_STATUS_ID" onDelete="CASCADE"
+			referencedColumnNames="id" referencedTableName="pts_status_change" />
+	</changeSet>
+	    
+</databaseChangeLog>
+
